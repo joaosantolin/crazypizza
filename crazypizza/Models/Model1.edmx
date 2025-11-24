@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Runtime content -->
+ <edmx:Runtime>
+ <!-- SSDL content -->
+ <edmx:StorageModels>
+ <Schema Namespace="crazypizzaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Carousel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Titulo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProdutoID" Type="int" Nullable="false" />
+          <Property Name="Destaque" Type="bit" />
+          <Property Name="Imagem" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Categoria1" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ItemPedido">
+          <Key>
+            <PropertyRef Name="ItemPedidoId" />
+          </Key>
+          <Property Name="ItemPedidoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PedidoId" Type="int" Nullable="false" />
+          <Property Name="ProdutoId" Type="int" Nullable="false" />
+          <Property Name="Quantidade" Type="int" Nullable="false" />
+          <Property Name="PrecoUnitario" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pedido">
+          <Key>
+            <PropertyRef Name="PedidoId" />
+          </Key>
+          <Property Name="PedidoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioId" Type="int" Nullable="false" />
+          <Property Name="DataCriacao" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EnderecoEntrega" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Produtos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Descricao" Type="nvarchar" MaxLength="255" />
+          <Property Name="Imagem" Type="nvarchar" MaxLength="150" />
+          <Property Name="Preco" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="DataCadastro" Type="datetime" />
+          <Property Name="Estoque" Type="int" Nullable="false" />
+          <Property Name="IdCategoria" Type="int" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomeUsuario" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Senha" Type="varchar" MaxLength="260" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+          <Property Name="DataUltimoAcesso" Type="datetime" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Admin" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Carousel_Produto">
+          <End Role="Produtos" Type="Self.Produtos" Multiplicity="1" />
+          <End Role="Carousel" Type="Self.Carousel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produtos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Carousel">
+              <PropertyRef Name="ProdutoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemPedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="ItemPedido" Type="Self.ItemPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoId" />
+            </Principal>
+            <Dependent Role="ItemPedido">
+              <PropertyRef Name="PedidoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Produtos_Categorias">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="0..1" />
+          <End Role="Produtos" Type="Self.Produtos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Produtos">
+              <PropertyRef Name="IdCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="crazypizzaDBModelStoreContainer">
+          <EntitySet Name="Carousel" EntityType="Self.Carousel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemPedido" EntityType="Self.ItemPedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produtos" EntityType="Self.Produtos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Carousel_Produto" Association="Self.FK_Carousel_Produto">
+            <End Role="Produtos" EntitySet="Produtos" />
+            <End Role="Carousel" EntitySet="Carousel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemPedido_Pedido" Association="Self.FK_ItemPedido_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="ItemPedido" EntitySet="ItemPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Produtos_Categorias" Association="Self.FK_Produtos_Categorias">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Produtos" EntitySet="Produtos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+ <!-- CSDL content -->
+ <edmx:ConceptualModels>
+ <Schema Namespace="crazypizzaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+ <EntityType Name="Carousel">
+ <Key>
+ <PropertyRef Name="Id" />
+ </Key>
+ <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="Titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="Descricao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="ProdutoID" Type="Int32" Nullable="false" />
+ <Property Name="Destaque" Type="Boolean" />
+ <NavigationProperty Name="Produtos" Relationship="crazypizzaDBModel.FK_Carousel_Produto" FromRole="Carousel" ToRole="Produtos" />
+          <Property Name="Imagem" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+ </EntityType>
+ <EntityType Name="Usuario">
+ <Key>
+ <PropertyRef Name="IdUsuario" />
+ </Key>
+ <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="NomeUsuario" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="Login" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="Senha" Type="String" MaxLength="260" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+ <Property Name="DataUltimoAcesso" Type="DateTime" Precision="3" />
+ <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+ <Property Name="Admin" Type="Boolean" Nullable="false" />
+ </EntityType>
+ <EntityType Name="Categoria">
+ <Key>
+ <PropertyRef Name="Id" />
+ </Key>
+ <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="Categoria1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+ <NavigationProperty Name="Produtos" Relationship="crazypizzaDBModel.FK_Produtos_Categorias" FromRole="Categoria" ToRole="Produtos" />
+ </EntityType>
+ <EntityType Name="Produtos">
+ <Key>
+ <PropertyRef Name="Id" />
+ </Key>
+ <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+ <Property Name="Descricao" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+ <Property Name="Imagem" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+ <Property Name="Preco" Type="Decimal" Precision="10" Scale="2" />
+ <Property Name="DataCadastro" Type="DateTime" Precision="3" />
+ <Property Name="Estoque" Type="Int32" Nullable="false" />
+ <Property Name="IdCategoria" Type="Int32" />
+ <NavigationProperty Name="Carousel" Relationship="crazypizzaDBModel.FK_Carousel_Produto" FromRole="Produtos" ToRole="Carousel" />
+ <NavigationProperty Name="Categoria" Relationship="crazypizzaDBModel.FK_Produtos_Categorias" FromRole="Produtos" ToRole="Categoria" />
+ </EntityType>
+ <!-- Added conceptual Pedido and ItemPedido -->
+ <EntityType Name="Pedido">
+ <Key>
+ <PropertyRef Name="PedidoId" />
+ </Key>
+ <Property Name="PedidoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="UsuarioId" Type="Int32" Nullable="false" />
+ <Property Name="DataCriacao" Type="DateTime" Nullable="false" Precision="3" />
+ <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+ <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+ <Property Name="EnderecoEntrega" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+ <NavigationProperty Name="Usuario" Relationship="crazypizzaDBModel.FK_Pedido_Usuario" FromRole="Pedido" ToRole="Usuario" />
+ <NavigationProperty Name="ItemPedidos" Relationship="crazypizzaDBModel.FK_ItemPedido_Pedido" FromRole="Pedido" ToRole="ItemPedido" />
+ </EntityType>
+ <EntityType Name="ItemPedido">
+ <Key>
+ <PropertyRef Name="ItemPedidoId" />
+ </Key>
+ <Property Name="ItemPedidoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+ <Property Name="PedidoId" Type="Int32" Nullable="false" />
+ <Property Name="ProdutoId" Type="Int32" Nullable="false" />
+ <Property Name="Quantidade" Type="Int32" Nullable="false" />
+ <Property Name="PrecoUnitario" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+ <Property Name="Subtotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+ <NavigationProperty Name="Pedido" Relationship="crazypizzaDBModel.FK_ItemPedido_Pedido" FromRole="ItemPedido" ToRole="Pedido" />
+ </EntityType>
+ <Association Name="FK_Carousel_Produto">
+ <End Type="crazypizzaDBModel.Produtos" Role="Produtos" Multiplicity="1" />
+ <End Type="crazypizzaDBModel.Carousel" Role="Carousel" Multiplicity="*" />
+ <ReferentialConstraint>
+ <Principal Role="Produtos">
+ <PropertyRef Name="Id" />
+ </Principal>
+ <Dependent Role="Carousel">
+ <PropertyRef Name="ProdutoID" />
+ </Dependent>
+ </ReferentialConstraint>
+ </Association>
+ <Association Name="FK_Produtos_Categorias">
+ <End Type="crazypizzaDBModel.Categoria" Role="Categoria" Multiplicity="0..1" />
+ <End Type="crazypizzaDBModel.Produtos" Role="Produtos" Multiplicity="*" />
+ <ReferentialConstraint>
+ <Principal Role="Categoria">
+ <PropertyRef Name="Id" />
+ </Principal>
+ <Dependent Role="Produtos">
+ <PropertyRef Name="IdCategoria" />
+ </Dependent>
+ </ReferentialConstraint>
+ </Association>
+ <!-- Added conceptual associations -->
+ <Association Name="FK_Pedido_Usuario">
+ <End Type="crazypizzaDBModel.Usuario" Role="Usuario" Multiplicity="1" />
+ <End Type="crazypizzaDBModel.Pedido" Role="Pedido" Multiplicity="*" />
+ <ReferentialConstraint>
+ <Principal Role="Usuario">
+ <PropertyRef Name="IdUsuario" />
+ </Principal>
+ <Dependent Role="Pedido">
+ <PropertyRef Name="UsuarioId" />
+ </Dependent>
+ </ReferentialConstraint>
+ </Association>
+ <Association Name="FK_ItemPedido_Pedido">
+ <End Type="crazypizzaDBModel.Pedido" Role="Pedido" Multiplicity="1" />
+ <End Type="crazypizzaDBModel.ItemPedido" Role="ItemPedido" Multiplicity="*" />
+ <ReferentialConstraint>
+ <Principal Role="Pedido">
+ <PropertyRef Name="PedidoId" />
+ </Principal>
+ <Dependent Role="ItemPedido">
+ <PropertyRef Name="PedidoId" />
+ </Dependent>
+ </ReferentialConstraint>
+ </Association>
+ <EntityContainer Name="crazypizzaDBEntities" annotation:LazyLoadingEnabled="true">
+ <EntitySet Name="Carousel" EntityType="Self.Carousel" />
+ <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+ <EntitySet Name="Categoria" EntityType="crazypizzaDBModel.Categoria" />
+ <EntitySet Name="Produtos" EntityType="crazypizzaDBModel.Produtos" />
+ <!-- Added sets -->
+ <EntitySet Name="Pedido" EntityType="crazypizzaDBModel.Pedido" />
+ <EntitySet Name="ItemPedido" EntityType="crazypizzaDBModel.ItemPedido" />
+ <AssociationSet Name="FK_Carousel_Produto" Association="crazypizzaDBModel.FK_Carousel_Produto">
+ <End Role="Produtos" EntitySet="Produtos" />
+ <End Role="Carousel" EntitySet="Carousel" />
+ </AssociationSet>
+ <AssociationSet Name="FK_Produtos_Categorias" Association="crazypizzaDBModel.FK_Produtos_Categorias">
+ <End Role="Categoria" EntitySet="Categoria" />
+ <End Role="Produtos" EntitySet="Produtos" />
+ </AssociationSet>
+ <!-- Added association sets -->
+ <AssociationSet Name="FK_Pedido_Usuario" Association="crazypizzaDBModel.FK_Pedido_Usuario">
+ <End Role="Usuario" EntitySet="Usuario" />
+ <End Role="Pedido" EntitySet="Pedido" />
+ </AssociationSet>
+ <AssociationSet Name="FK_ItemPedido_Pedido" Association="crazypizzaDBModel.FK_ItemPedido_Pedido">
+ <End Role="Pedido" EntitySet="Pedido" />
+ <End Role="ItemPedido" EntitySet="ItemPedido" />
+ </AssociationSet>
+ </EntityContainer>
+ </Schema>
+ </edmx:ConceptualModels>
+ <!-- C-S mapping content -->
+ <edmx:Mappings>
+ <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+ <EntityContainerMapping StorageEntityContainer="crazypizzaDBModelStoreContainer" CdmEntityContainer="crazypizzaDBEntities">
+ <EntitySetMapping Name="Carousel">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.Carousel">
+ <MappingFragment StoreEntitySet="Carousel">
+ <ScalarProperty Name="Imagem" ColumnName="Imagem" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+ <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+ <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+ <ScalarProperty Name="ProdutoID" ColumnName="ProdutoID" />
+ <ScalarProperty Name="Destaque" ColumnName="Destaque" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ <EntitySetMapping Name="Usuario">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.Usuario">
+ <MappingFragment StoreEntitySet="Usuario">
+ <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+ <ScalarProperty Name="NomeUsuario" ColumnName="NomeUsuario" />
+ <ScalarProperty Name="Login" ColumnName="Login" />
+ <ScalarProperty Name="Senha" ColumnName="Senha" />
+ <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+ <ScalarProperty Name="DataUltimoAcesso" ColumnName="DataUltimoAcesso" />
+ <ScalarProperty Name="Email" ColumnName="Email" />
+ <ScalarProperty Name="Admin" ColumnName="Admin" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ <EntitySetMapping Name="Categoria">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.Categoria">
+ <MappingFragment StoreEntitySet="Categoria">
+ <ScalarProperty Name="Categoria1" ColumnName="Categoria1" />
+ <ScalarProperty Name="Id" ColumnName="Id" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ <EntitySetMapping Name="Produtos">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.Produtos">
+ <MappingFragment StoreEntitySet="Produtos">
+ <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+ <ScalarProperty Name="Estoque" ColumnName="Estoque" />
+ <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+ <ScalarProperty Name="Preco" ColumnName="Preco" />
+ <ScalarProperty Name="Imagem" ColumnName="Imagem" />
+ <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+ <ScalarProperty Name="Nome" ColumnName="Nome" />
+ <ScalarProperty Name="Id" ColumnName="Id" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ <!-- Added mappings for Pedido and ItemPedido -->
+ <EntitySetMapping Name="Pedido">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.Pedido">
+ <MappingFragment StoreEntitySet="Pedido">
+ <ScalarProperty Name="PedidoId" ColumnName="PedidoId" />
+ <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+ <ScalarProperty Name="DataCriacao" ColumnName="DataCriacao" />
+ <ScalarProperty Name="Status" ColumnName="Status" />
+ <ScalarProperty Name="Total" ColumnName="Total" />
+ <ScalarProperty Name="EnderecoEntrega" ColumnName="EnderecoEntrega" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ <EntitySetMapping Name="ItemPedido">
+ <EntityTypeMapping TypeName="crazypizzaDBModel.ItemPedido">
+ <MappingFragment StoreEntitySet="ItemPedido">
+ <ScalarProperty Name="ItemPedidoId" ColumnName="ItemPedidoId" />
+ <ScalarProperty Name="PedidoId" ColumnName="PedidoId" />
+ <ScalarProperty Name="ProdutoId" ColumnName="ProdutoId" />
+ <ScalarProperty Name="Quantidade" ColumnName="Quantidade" />
+ <ScalarProperty Name="PrecoUnitario" ColumnName="PrecoUnitario" />
+ <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+ </MappingFragment>
+ </EntityTypeMapping>
+ </EntitySetMapping>
+ </EntityContainerMapping>
+ </Mapping>
+ </edmx:Mappings>
+ </edmx:Runtime>
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+ <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <Connection>
+ <DesignerInfoPropertySet>
+ <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+ </DesignerInfoPropertySet>
+ </Connection>
+ <Options>
+ <DesignerInfoPropertySet>
+ <DesignerProperty Name="ValidateOnBuild" Value="true" />
+ <DesignerProperty Name="EnablePluralization" Value="false" />
+ <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+ <DesignerProperty Name="UseLegacyProvider" Value="false" />
+ <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+ </DesignerInfoPropertySet>
+ </Options>
+ <!-- Diagram content (shape and connector positions) -->
+ <Diagrams></Diagrams>
+ </Designer>
+</edmx:Edmx>
