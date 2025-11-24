@@ -1,4 +1,15 @@
-﻿E-commerce de Fast Food (ASP.NET Web Forms) - Crazy Pizza
+!!IMPORTANTE!!
+CASO OCORRA O ERRO DE NÃO LOCALIZAR A PASTA '..\bin\roslyn\csc.exe'
+ABRA AS FERRAMENTAS->NuGet Packege Manager->Package Manager Console E NO CONSOLE EXECUTE O COMANDO:
+
+Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r
+
+ESTE ERRO ESTÁ OCORRENDO NESTA VERSÃO DO COMPILADOR EM ESPECIFICO E NÃO ENCONTREI UMA SOLUÇÃO MAIS PRATICA,
+OCORRENDO QUANDO IMPORTA/BAIXA DO GITHUB
+!!IMPORTANTE!!
+--
+
+E-commerce de Fast Food (ASP.NET Web Forms) - Crazy Pizza
 Alunos: Eduardo José Rodrigues e João Santolin Azevedo.
 
 -- LOGINS PARA TESTES --
